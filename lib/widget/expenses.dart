@@ -49,9 +49,25 @@ class _ExpensesState extends State<Expenses> {
   }
 
   void _removeExpense(Expense e) {
+    final num = _registeredExpenses.indexOf(e);
     setState(() {
       _registeredExpenses.remove(e);
     });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${e.title} Deleted'),
+        duration: const Duration(seconds: 3),
+        action: SnackBarAction(
+          label: "Undo",
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(num, e);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   void _addExpense(Expense e) {
@@ -62,6 +78,19 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = const Center(
+      child: Text('No expenses Found! Start adding more!'),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      setState(() {
+        mainContent = ExpenseList(
+          expenses: _registeredExpenses,
+          removedExpense: _removeExpense,
+        );
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         // flutter has a dedicated widget/function thingy for a bar.
@@ -79,12 +108,7 @@ class _ExpensesState extends State<Expenses> {
         children: [
           // toolbar with add button -> Row() is a way to do it.
           const Text('The chart'),
-          Expanded(
-            child: ExpenseList(
-              expenses: _registeredExpenses,
-              removedExpense: _removeExpense,
-            ),
-          ),
+          Expanded(child: mainContent),
         ],
       ),
     );
