@@ -94,7 +94,7 @@ class _ExpensesState extends State<Expenses> {
     return Scaffold(
       appBar: AppBar(
         // flutter has a dedicated widget/function thingy for a bar.
-        backgroundColor: const Color.fromARGB(255, 165, 211, 249),
+        // backgroundColor: const Color.fromARGB(255, 165, 211, 249),
         title: const Text("Flutter Expense Tracker"),
         actions: [
           IconButton(
