@@ -1,6 +1,7 @@
 import 'package:et/expenses_list.dart';
 import 'package:et/models/expense.dart';
 import 'package:et/widget/new_expense.dart';
+import 'package:et/widget/chart/chart.dart';
 import 'package:flutter/material.dart';
 
 class Expenses extends StatefulWidget {
@@ -15,25 +16,25 @@ class _ExpensesState extends State<Expenses> {
   final List<Expense> _registeredExpenses = [
     Expense(
       title: 'Fried Chicken Sandwhich',
-      amount: 19.99,
+      amount: 250,
       date: DateTime.now(),
       cat: Category.food,
     ),
     Expense(
       title: 'E-reader',
-      amount: 19.98,
+      amount: 450,
       date: DateTime.now(),
       cat: Category.leisure,
     ),
     Expense(
       title: 'Laptop',
-      amount: 19.97,
+      amount: 700,
       date: DateTime.now(),
       cat: Category.work,
     ),
     Expense(
       title: 'Backpack',
-      amount: 19.96,
+      amount: 350,
       date: DateTime.now(),
       cat: Category.travel,
     ),
@@ -107,12 +108,11 @@ class _ExpensesState extends State<Expenses> {
       body: Column(
         children: [
           // toolbar with add button -> Row() is a way to do it.
-          const Text('The chart'),
+          // const Text('The chart'),
+          Chart(expenses: _registeredExpenses),
           Expanded(child: mainContent),
         ],
       ),
     );
   }
 }
-
-
