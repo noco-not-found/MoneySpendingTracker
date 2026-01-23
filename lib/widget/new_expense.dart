@@ -94,95 +94,195 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(16, 48, 16, 16),
-      child: Column(
-        children: [
-          TextField(
-            // onChanged: _saveTitleInput,     //-> THIS IS THE FIRST WAY TO HANDLE INPUT
-            controller: _titleController,
-            maxLength: 50,
-            decoration: InputDecoration(label: Text("Yabadabdo")),
-          ),
+    final keyBoardAdjustment = MediaQuery.of(context).viewInsets.bottom;
+    return LayoutBuilder(
+      builder: (ctx, constraints) {
+        final width = constraints.maxWidth;
 
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _numberController,
-                  // maxLength: 50,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    prefixText: '\$ ',
-                    label: Text("Amount"),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      _selectedDate == null
-                          ? 'No Date Selected'
-                          : formatter.format(_selectedDate!),
-                    ), // ! is for bruteforcing dart.
-                    IconButton(
-                      onPressed: _datePicker,
-                      icon: const Icon(Icons.calendar_month),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          SizedBox(height: 16),
-          Row(
-            children: [
-              DropdownButton(
-                value: _selectedCat,
-                items: Category.values
-                    .map(
-                      (e) => DropdownMenuItem(
-                        value: e,
-                        child: Text(e.name.toUpperCase()),
+        return SingleChildScrollView(
+          // final width = MediaQuery.
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, keyBoardAdjustment + 16),
+            child: Column(
+              children: [
+                if (width >= 600)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          // onChanged: _saveTitleInput,     //-> THIS IS THE FIRST WAY TO HANDLE INPUT
+                          controller: _titleController,
+                          maxLength: 50,
+                          decoration: InputDecoration(label: Text("Yabadabdo")),
+                        ),
                       ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  // print(value);
-                  if (value == null) {
-                    return;
-                  }
-                  setState(() {
-                    _selectedCat = value;
-                  });
-                },
-              ),
+                      const SizedBox(width: 24),
+                      Expanded(
+                        child: TextField(
+                          controller: _numberController,
+                          // maxLength: 50,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            prefixText: '\$ ',
+                            label: Text("Amount"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  TextField(
+                    // onChanged: _saveTitleInput,     //-> THIS IS THE FIRST WAY TO HANDLE INPUT
+                    controller: _titleController,
+                    maxLength: 50,
+                    decoration: InputDecoration(label: Text("Yabadabdo")),
+                  ),
 
-              const Spacer(),
+                if (width >= 600)
+                  Row(
+                    children: [
+                      DropdownButton(
+                        value: _selectedCat,
+                        items: Category.values
+                            .map(
+                              (e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e.name.toUpperCase()),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) {
+                          // print(value);
+                          if (value == null) {
+                            return;
+                          }
+                          setState(() {
+                            _selectedCat = value;
+                          });
+                        },
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              _selectedDate == null
+                                  ? 'No Date Selected'
+                                  : formatter.format(_selectedDate!),
+                            ), // ! is for bruteforcing dart.
+                            IconButton(
+                              onPressed: _datePicker,
+                              icon: const Icon(Icons.calendar_month),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _numberController,
+                          // maxLength: 50,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            prefixText: '\$ ',
+                            label: Text("Amount"),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              _selectedDate == null
+                                  ? 'No Date Selected'
+                                  : formatter.format(_selectedDate!),
+                            ), // ! is for bruteforcing dart.
+                            IconButton(
+                              onPressed: _datePicker,
+                              icon: const Icon(Icons.calendar_month),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                SizedBox(height: 16),
+                if (width >= 600)
+                  Row(children: [
+                    const Spacer(),
 
-              SizedBox(width: 10),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("Cancel"),
-              ),
+                      SizedBox(width: 10),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Cancel"),
+                      ),
 
-              ElevatedButton(
-                onPressed: () {
-                  _sumbitData();
-                },
-                child: const Text("Save Expenses"),
-              ),
-            ],
+                      ElevatedButton(
+                        onPressed: () {
+                          _sumbitData();
+                        },
+                        child: const Text("Save Expenses"),
+                      ),
+                  ],)
+                else
+                  Row(
+                    children: [
+                      DropdownButton(
+                        value: _selectedCat,
+                        items: Category.values
+                            .map(
+                              (e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e.name.toUpperCase()),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (value) {
+                          // print(value);
+                          if (value == null) {
+                            return;
+                          }
+                          setState(() {
+                            _selectedCat = value;
+                          });
+                        },
+                      ),
+
+                      const Spacer(),
+
+                      SizedBox(width: 10),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Cancel"),
+                      ),
+
+                      ElevatedButton(
+                        onPressed: () {
+                          _sumbitData();
+                        },
+                        child: const Text("Save Expenses"),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

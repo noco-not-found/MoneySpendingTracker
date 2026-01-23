@@ -41,8 +41,12 @@ class _ExpensesState extends State<Expenses> {
   ];
 
   void _openAddExpenseOverlay() {
+    final bool landscape =
+        MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
     // underscore because private
     showModalBottomSheet(
+      // useSafeArea: landscape ? false : true,
+      useSafeArea: true,
       isScrollControlled: true,
       context: context,
       builder: (ctx) => NewExpense(onAddExpense: _addExpense),
@@ -96,36 +100,38 @@ class _ExpensesState extends State<Expenses> {
       });
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        // flutter has a dedicated widget/function thingy for a bar.
-        // backgroundColor: const Color.fromARGB(255, 165, 211, 249),
-        title: const Text("Flutter Expense Tracker"),
-        actions: [
-          IconButton(
-            // a built in widget for just an icon
-            onPressed: _openAddExpenseOverlay,
-            icon: const Icon(Icons.add),
-          ),
-        ],
-      ),
-      body: !landscape
-          ? Column(
-              children: [
-                // toolbar with add button -> Row() is a way to do it.
-                // const Text('The chart'),
-                Chart(expenses: _registeredExpenses),
-                Expanded(child: mainContent),
-              ],
-            )
-          : Row(
-              children: [
-                // toolbar with add button -> Row() is a way to do it.
-                // const Text('The chart'),
-                Expanded(child: Chart(expenses: _registeredExpenses)),
-                Expanded(child: mainContent),
-              ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          // flutter has a dedicated widget/function thingy for a bar.
+          // backgroundColor: const Color.fromARGB(255, 165, 211, 249),
+          title: const Text("Flutter Expense Tracker"),
+          actions: [
+            IconButton(
+              // a built in widget for just an icon
+              onPressed: _openAddExpenseOverlay,
+              icon: const Icon(Icons.add),
             ),
+          ],
+        ),
+        body: !landscape
+            ? Column(
+                children: [
+                  // toolbar with add button -> Row() is a way to do it.
+                  // const Text('The chart'),
+                  Chart(expenses: _registeredExpenses),
+                  Expanded(child: mainContent),
+                ],
+              )
+            : Row(
+                children: [
+                  // toolbar with add button -> Row() is a way to do it.
+                  // const Text('The chart'),
+                  Expanded(child: Chart(expenses: _registeredExpenses)),
+                  Expanded(child: mainContent),
+                ],
+              ),
+      ),
     );
   }
 }
